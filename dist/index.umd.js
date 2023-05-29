@@ -12,18 +12,15 @@
     var target = {};
     var sourceKeys = Object.keys(source);
     var key, i;
-
     for (i = 0; i < sourceKeys.length; i++) {
       key = sourceKeys[i];
       if (excluded.indexOf(key) >= 0) continue;
       target[key] = source[key];
     }
-
     return target;
   }
 
   var KeyEnum;
-
   (function (KeyEnum) {
     KeyEnum["TAB"] = "Tab";
     KeyEnum["ENTER"] = "Enter";
@@ -33,48 +30,42 @@
 
   var styles = {"wrap":"_31Ve9","input":"_ZX6Lw","complete":"_NwvFz"};
 
+  var _excluded = ["value", "dataSource", "className", "navigate", "caseSensitive", "onBlur", "onFocus", "onChange", "onPressEnter", "onSelect"];
   var Autocomplete = function Autocomplete(props, ref) {
     var value = props.value,
-        dataSource = props.dataSource,
-        className = props.className,
-        _props$navigate = props.navigate,
-        navigate = _props$navigate === void 0 ? true : _props$navigate,
-        _props$caseSensitive = props.caseSensitive,
-        caseSensitive = _props$caseSensitive === void 0 ? true : _props$caseSensitive,
-        onBlur = props.onBlur,
-        onFocus = props.onFocus,
-        onChange = props.onChange,
-        onPressEnter = props.onPressEnter,
-        onSelect = props.onSelect,
-        others = _objectWithoutPropertiesLoose(props, ["value", "dataSource", "className", "navigate", "caseSensitive", "onBlur", "onFocus", "onChange", "onPressEnter", "onSelect"]);
-
+      dataSource = props.dataSource,
+      className = props.className,
+      _props$navigate = props.navigate,
+      navigate = _props$navigate === void 0 ? true : _props$navigate,
+      _props$caseSensitive = props.caseSensitive,
+      caseSensitive = _props$caseSensitive === void 0 ? true : _props$caseSensitive,
+      onBlur = props.onBlur,
+      onFocus = props.onFocus,
+      onChange = props.onChange,
+      onPressEnter = props.onPressEnter,
+      onSelect = props.onSelect,
+      others = _objectWithoutPropertiesLoose(props, _excluded);
     var _useState = React.useState(''),
-        innerVal = _useState[0],
-        setInnerVal = _useState[1];
-
+      innerVal = _useState[0],
+      setInnerVal = _useState[1];
     var _useState2 = React.useState(),
-        matchedDataSource = _useState2[0],
-        setMatchedDataSource = _useState2[1];
-
+      matchedDataSource = _useState2[0],
+      setMatchedDataSource = _useState2[1];
     var _useState3 = React.useState(0),
-        activeIndex = _useState3[0],
-        setActiveIndex = _useState3[1];
-
+      activeIndex = _useState3[0],
+      setActiveIndex = _useState3[1];
     var ctrlValue = value != null ? value : innerVal;
     /**
      * inputRef
      */
-
     var inputRef = React.useRef();
     React__default.useImperativeHandle(ref, function () {
       return inputRef.current;
     });
-
     var updateValue = function updateValue(value) {
       onChange && onChange(value);
       setInnerVal(value);
     };
-
     var updateMatchedDataSource = function updateMatchedDataSource(value) {
       setActiveIndex(0);
       value ? setMatchedDataSource(dataSource.filter(function (_ref) {
@@ -86,8 +77,6 @@
      * InputChange Handler
      * @param e
      */
-
-
     var handleChange = function handleChange(e) {
       var value = e.target.value;
       updateValue(value);
@@ -98,13 +87,10 @@
      * deal with `Tab` | `Enter` | `ArrowUp` | `ArrowDown`
      * @param e
      */
-
-
     var handleKeyDown = function handleKeyDown(e) {
       if (Object.values(KeyEnum).includes(e.key)) {
         e.preventDefault();
       }
-
       switch (e.key) {
         case KeyEnum.TAB:
           var matchedDataSourceItem = matchedDataSource == null ? void 0 : matchedDataSource[activeIndex];
@@ -112,13 +98,11 @@
           /**
            * onChange >>> onSelect >>> Search matched item
            */
-
           var text = matchedDataSourceItem.text;
           updateValue(text);
           onSelect && onSelect(matchedDataSourceItem);
           updateMatchedDataSource(text);
           break;
-
         case KeyEnum.ENTER:
           /**
            * onPressEnter >>> Reset
@@ -126,39 +110,31 @@
           onPressEnter && onPressEnter(ctrlValue);
           updateMatchedDataSource();
           break;
-
         case KeyEnum.ARROW_UP:
           if (!navigate) break;
           setActiveIndex(function (idx) {
-            if (matchedDataSource == null ? void 0 : matchedDataSource.length) {
+            if (matchedDataSource != null && matchedDataSource.length) {
               return (idx - 1 + matchedDataSource.length) % matchedDataSource.length;
             }
-
             return 0;
           });
           break;
-
         case KeyEnum.ARROW_DOWN:
           if (!navigate) break;
           setActiveIndex(function (idx) {
-            if (matchedDataSource == null ? void 0 : matchedDataSource.length) {
+            if (matchedDataSource != null && matchedDataSource.length) {
               return (idx + 1) % matchedDataSource.length;
             }
-
             return 0;
           });
           break;
       }
     };
-
     var breakUp = function breakUp() {
       var _matchedDataSource$ac;
-
-      return (matchedDataSource == null ? void 0 : (_matchedDataSource$ac = matchedDataSource[activeIndex]) == null ? void 0 : _matchedDataSource$ac.text) ? "" + ctrlValue + matchedDataSource[activeIndex].text.slice(ctrlValue.length) : undefined;
+      return matchedDataSource != null && (_matchedDataSource$ac = matchedDataSource[activeIndex]) != null && _matchedDataSource$ac.text ? "" + ctrlValue + matchedDataSource[activeIndex].text.slice(ctrlValue.length) : undefined;
     };
-
     var wrapClassString = classNames('ria-wrap', styles.wrap, className); // `className` should cover `styles.wrap`
-
     var inputClassString = classNames('ria-input', styles.input);
     var completeClassString = classNames('ria-complete', styles.complete);
     var completeContent = breakUp();
@@ -177,7 +153,6 @@
       className: completeClassString
     }, completeContent));
   };
-
   var RefAutoComplete = React__default.forwardRef(Autocomplete);
 
   return RefAutoComplete;
