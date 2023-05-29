@@ -7,13 +7,15 @@
 ## Installation
 
 ```shell
-yarn add react-inline-autocomplete
+# yarn add react-inline-autocomplete old
+yarn add https://github.com/HRNPH/react-inline-autocomplete.git
 ```
 
 or
 
 ```shell
-npm install react-inline-autocomplete --save
+# npm install react-inline-autocomplete --save old
+npm install https://github.com/HRNPH/react-inline-autocomplete.git --save
 ```
 
 **Remember to import `react-inline-autocomplete/dist/index.css` to your project.**
