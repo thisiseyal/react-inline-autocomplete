@@ -25,7 +25,8 @@ var KeyEnum;
 
 var styles = {"wrap":"_31Ve9","input":"_ZX6Lw","complete":"_NwvFz"};
 
-const _excluded = ["value", "dataSource", "className", "navigate", "caseSensitive", "onBlur", "onFocus", "onChange", "onPressEnter", "onSelect"];
+const _excluded = ["value", "dataSource", "className", "navigate", "caseSensitive", "onBlur", "onFocus", "onChange", "onPressEnter", "onSelect"],
+  _excluded2 = ["value", "dataSource", "className", "navigate", "caseSensitive", "onBlur", "onFocus", "onChange", "onPressEnter", "onSelect"];
 const Autocomplete = (props, ref) => {
   const {
       value,
@@ -144,6 +145,121 @@ const Autocomplete = (props, ref) => {
   }, completeContent));
 };
 const RefAutoComplete = React.forwardRef(Autocomplete);
+const TextAreaAutocomplete = (props, ref) => {
+  const {
+      value,
+      dataSource,
+      className,
+      navigate = true,
+      caseSensitive = true,
+      onBlur,
+      onFocus,
+      onChange,
+      onSelect
+    } = props,
+    others = _objectWithoutPropertiesLoose(props, _excluded2);
+  const [innerVal, setInnerVal] = useState('');
+  const [matchedDataSource, setMatchedDataSource] = useState();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const ctrlValue = value != null ? value : innerVal;
+  /**
+   * inputRef
+   */
+  const inputRef = useRef();
+  React.useImperativeHandle(ref, () => inputRef.current);
+  const updateValue = value => {
+    onChange && onChange(value);
+    setInnerVal(value);
+  };
+  const updateMatchedDataSource = value => {
+    setActiveIndex(0);
+    value ? setMatchedDataSource(dataSource.filter(({
+      text
+    }) => {
+      return caseSensitive ? text.startsWith(value) && text !== value : ignoreCase.startsWith(text, value) && !ignoreCase.equals(text, value);
+    })) : setMatchedDataSource([]);
+  };
+  /**
+   * InputChange Handler
+   * @param e
+   */
+  const handleChange = e => {
+    const value = e.target.value;
+    updateValue(value);
+    updateMatchedDataSource(value);
+  };
+  /**
+   * KeyDown Handler
+   * deal with `Tab` | `Enter` | `ArrowUp` | `ArrowDown`
+   * @param e
+   */
+  const handleKeyDown = e => {
+    if (Object.values(KeyEnum).includes(e.key)) {
+      e.preventDefault();
+    }
+    switch (e.key) {
+      case KeyEnum.TAB:
+        const matchedDataSourceItem = matchedDataSource == null ? void 0 : matchedDataSource[activeIndex];
+        if (!matchedDataSourceItem) return;
+        /**
+         * onChange >>> onSelect >>> Search matched item
+         */
+        const {
+          text
+        } = matchedDataSourceItem;
+        updateValue(text);
+        onSelect && onSelect(matchedDataSourceItem);
+        updateMatchedDataSource(text);
+        break;
+      case KeyEnum.ENTER:
+        /**
+         * onPressEnter >>> Just add a new line
+         */
+        updateValue(`${ctrlValue}\n`);
+        break;
+      case KeyEnum.ARROW_UP:
+        if (!navigate) break;
+        setActiveIndex(idx => {
+          if (matchedDataSource != null && matchedDataSource.length) {
+            return (idx - 1 + matchedDataSource.length) % matchedDataSource.length;
+          }
+          return 0;
+        });
+        break;
+      case KeyEnum.ARROW_DOWN:
+        if (!navigate) break;
+        setActiveIndex(idx => {
+          if (matchedDataSource != null && matchedDataSource.length) {
+            return (idx + 1) % matchedDataSource.length;
+          }
+          return 0;
+        });
+        break;
+    }
+  };
+  const breakUp = () => {
+    var _matchedDataSource$ac2;
+    return matchedDataSource != null && (_matchedDataSource$ac2 = matchedDataSource[activeIndex]) != null && _matchedDataSource$ac2.text ? `${ctrlValue}${matchedDataSource[activeIndex].text.slice(ctrlValue.length)}` : undefined;
+  };
+  const wrapClassString = classNames('ria-wrap', styles.wrap, className); // `className` should cover `styles.wrap`
+  const inputClassString = classNames('ria-input', styles.input);
+  const completeClassString = classNames('ria-complete', styles.complete);
+  const completeContent = breakUp();
+  return React.createElement("div", {
+    className: wrapClassString
+  }, React.createElement("textarea", Object.assign({
+    ref: inputRef,
+    className: inputClassString,
+    value: ctrlValue,
+    onBlur: onBlur,
+    onFocus: onFocus,
+    onChange: handleChange,
+    onKeyDown: handleKeyDown
+  }, others)), React.createElement("div", {
+    className: completeClassString
+  }, completeContent));
+};
+const RefTextAreaAutocomplete = React.forwardRef(TextAreaAutocomplete);
 
-export default RefAutoComplete;
+export { RefAutoComplete as InlineAutocomplete, RefTextAreaAutocomplete as TextAreaAutocomplete };
 //# sourceMappingURL=index.modern.js.map

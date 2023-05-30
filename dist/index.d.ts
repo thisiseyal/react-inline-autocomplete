@@ -20,4 +20,6 @@ export interface DataSourceItem {
     [key: string]: any;
 }
 declare const RefAutoComplete: React.ForwardRefExoticComponent<Props & React.RefAttributes<HTMLInputElement>>;
-export default RefAutoComplete;
+export { RefAutoComplete as InlineAutocomplete };
+declare const RefTextAreaAutocomplete: React.ForwardRefExoticComponent<Props & React.RefAttributes<HTMLTextAreaElement>>;
+export { RefTextAreaAutocomplete as TextAreaAutocomplete };
