@@ -34,7 +34,7 @@
 ._NwvFz {
     position: absolute;
     top: 0;
-    display: block;
+    display: block !important;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
     padding: 4px 11px;

@@ -32,7 +32,7 @@
 .complete {
     position: absolute;
     top: 0;
-    display: block;
+    display: block !important;
     box-sizing: border-box;
     padding: 4px 11px;
     width: 100%;
