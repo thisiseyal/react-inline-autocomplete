@@ -81,7 +81,7 @@ export default function Home(): JSX.Element {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="min-h-screen flex-col items-center justify-between p-24">
       <section>
         <div className='mb-5'>
           {dataSource.map((i, idx) => (
