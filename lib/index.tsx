@@ -56,15 +56,19 @@ const Autocomplete: React.ForwardRefRenderFunction<HTMLInputElement, Props> = (p
     setInnerVal(value);
   };
 
+  const findMatchedDataSourceItem = (value: string) => {
+    return dataSource.filter(({ text }) => {
+      return caseSensitive
+        ? text.startsWith(value) && text !== value
+        : ignoreCase.startsWith(text, value) && !ignoreCase.equals(text, value);
+    })
+  }
+
   const updateMatchedDataSource = (value?: string) => {
     setActiveIndex(0);
     value
       ? setMatchedDataSource(
-          dataSource.filter(({ text }) => {
-            return caseSensitive
-              ? text.startsWith(value) && text !== value
-              : ignoreCase.startsWith(text, value) && !ignoreCase.equals(text, value);
-          })
+        findMatchedDataSourceItem(value)
         )
       : setMatchedDataSource([]);
   };
@@ -86,12 +90,13 @@ const Autocomplete: React.ForwardRefRenderFunction<HTMLInputElement, Props> = (p
    */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (Object.values(KeyEnum).includes(e.key as KeyEnum)) {
-      e.preventDefault();
+      (e.key !== KeyEnum.TAB) && e.preventDefault();
     }
+
+    const matchedDataSourceItem = matchedDataSource?.[activeIndex];
 
     switch (e.key) {
       case KeyEnum.TAB:
-        const matchedDataSourceItem = matchedDataSource?.[activeIndex];
         if (!matchedDataSourceItem) return;
 
         /**
@@ -106,6 +111,7 @@ const Autocomplete: React.ForwardRefRenderFunction<HTMLInputElement, Props> = (p
         /**
          * onPressEnter >>> Reset
          */
+        
         onPressEnter && onPressEnter(ctrlValue);
         updateMatchedDataSource();
         break;
@@ -140,9 +146,9 @@ const Autocomplete: React.ForwardRefRenderFunction<HTMLInputElement, Props> = (p
       : undefined;
   };
 
-  const wrapClassString = classNames('ria-wrap', styles.wrap, className); // `className` should cover `styles.wrap`
-  const inputClassString = classNames('ria-input', styles.input);
-  const completeClassString = classNames('ria-complete', styles.complete);
+  const wrapClassString = classNames('ria-wrap', styles['inline-autocomplete-wrap'], className); // `className` should cover `styles.wrap`
+  const inputClassString = classNames('ria-input', styles['inline-autocomplete-input']);
+  const completeClassString = classNames('ria-complete', styles['inline-autocomplete-complete']);
   const completeContent = breakUp();
 
   return (
@@ -226,7 +232,7 @@ const TextAreaAutocomplete: React.ForwardRefRenderFunction<HTMLTextAreaElement, 
    */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (Object.values(KeyEnum).includes(e.key as KeyEnum)) {
-      e.preventDefault();
+      (e.key != KeyEnum.TAB) && e.preventDefault();
     }
 
     switch (e.key) {
@@ -280,9 +286,9 @@ const TextAreaAutocomplete: React.ForwardRefRenderFunction<HTMLTextAreaElement, 
       : undefined;
   };
 
-  const wrapClassString = classNames('ria-wrap', styles.wrap, className); // `className` should cover `styles.wrap`
-  const inputClassString = classNames('ria-input', styles.input);
-  const completeClassString = classNames('ria-complete', styles.complete);
+  const wrapClassString = classNames('ria-wrap', styles['inline-autocomplete-wrap'], className); // `className` should cover `styles.wrap`
+  const inputClassString = classNames('ria-input', styles['inline-autocomplete-input']);
+  const completeClassString = classNames('ria-complete', ['inline-autocomplete-complete']);
   const completeContent = breakUp();
 
   return (

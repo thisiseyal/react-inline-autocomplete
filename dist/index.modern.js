@@ -23,7 +23,7 @@ var KeyEnum;
   KeyEnum["ARROW_DOWN"] = "ArrowDown";
 })(KeyEnum || (KeyEnum = {}));
 
-var styles = {"wrap":"_31Ve9","input":"_ZX6Lw","complete":"_NwvFz"};
+var styles = {"inline-autocomplete-wrap":"_2ob9L","inline-autocomplete-input":"_ocEvG","inline-autocomplete-complete":"_2eaMo"};
 
 const _excluded = ["value", "dataSource", "className", "navigate", "caseSensitive", "onBlur", "onFocus", "onChange", "onPressEnter", "onSelect"],
   _excluded2 = ["value", "dataSource", "className", "navigate", "caseSensitive", "onBlur", "onFocus", "onChange", "onPressEnter", "onSelect"];
@@ -54,13 +54,16 @@ const Autocomplete = (props, ref) => {
     onChange && onChange(value);
     setInnerVal(value);
   };
-  const updateMatchedDataSource = value => {
-    setActiveIndex(0);
-    value ? setMatchedDataSource(dataSource.filter(({
+  const findMatchedDataSourceItem = value => {
+    return dataSource.filter(({
       text
     }) => {
       return caseSensitive ? text.startsWith(value) && text !== value : ignoreCase.startsWith(text, value) && !ignoreCase.equals(text, value);
-    })) : setMatchedDataSource([]);
+    });
+  };
+  const updateMatchedDataSource = value => {
+    setActiveIndex(0);
+    value ? setMatchedDataSource(findMatchedDataSourceItem(value)) : setMatchedDataSource([]);
   };
   /**
    * InputChange Handler
@@ -78,11 +81,11 @@ const Autocomplete = (props, ref) => {
    */
   const handleKeyDown = e => {
     if (Object.values(KeyEnum).includes(e.key)) {
-      e.preventDefault();
+      e.key !== KeyEnum.TAB && e.preventDefault();
     }
+    const matchedDataSourceItem = matchedDataSource == null ? void 0 : matchedDataSource[activeIndex];
     switch (e.key) {
       case KeyEnum.TAB:
-        const matchedDataSourceItem = matchedDataSource == null ? void 0 : matchedDataSource[activeIndex];
         if (!matchedDataSourceItem) return;
         /**
          * onChange >>> onSelect >>> Search matched item
@@ -125,9 +128,9 @@ const Autocomplete = (props, ref) => {
     var _matchedDataSource$ac;
     return matchedDataSource != null && (_matchedDataSource$ac = matchedDataSource[activeIndex]) != null && _matchedDataSource$ac.text ? `${ctrlValue}${matchedDataSource[activeIndex].text.slice(ctrlValue.length)}` : undefined;
   };
-  const wrapClassString = classNames('ria-wrap', styles.wrap, className); // `className` should cover `styles.wrap`
-  const inputClassString = classNames('ria-input', styles.input);
-  const completeClassString = classNames('ria-complete', styles.complete);
+  const wrapClassString = classNames('ria-wrap', styles['inline-autocomplete-wrap'], className); // `className` should cover `styles.wrap`
+  const inputClassString = classNames('ria-input', styles['inline-autocomplete-input']);
+  const completeClassString = classNames('ria-complete', styles['inline-autocomplete-complete']);
   const completeContent = breakUp();
   return React.createElement("div", {
     className: wrapClassString
@@ -195,7 +198,7 @@ const TextAreaAutocomplete = (props, ref) => {
    */
   const handleKeyDown = e => {
     if (Object.values(KeyEnum).includes(e.key)) {
-      e.preventDefault();
+      e.key != KeyEnum.TAB && e.preventDefault();
     }
     switch (e.key) {
       case KeyEnum.TAB:
@@ -241,9 +244,9 @@ const TextAreaAutocomplete = (props, ref) => {
     var _matchedDataSource$ac2;
     return matchedDataSource != null && (_matchedDataSource$ac2 = matchedDataSource[activeIndex]) != null && _matchedDataSource$ac2.text ? `${ctrlValue}${matchedDataSource[activeIndex].text.slice(ctrlValue.length)}` : undefined;
   };
-  const wrapClassString = classNames('ria-wrap', styles.wrap, className); // `className` should cover `styles.wrap`
-  const inputClassString = classNames('ria-input', styles.input);
-  const completeClassString = classNames('ria-complete', styles.complete);
+  const wrapClassString = classNames('ria-wrap', styles['inline-autocomplete-wrap'], className); // `className` should cover `styles.wrap`
+  const inputClassString = classNames('ria-input', styles['inline-autocomplete-input']);
+  const completeClassString = classNames('ria-complete', ['inline-autocomplete-complete']);
   const completeContent = breakUp();
   return React.createElement("div", {
     className: wrapClassString

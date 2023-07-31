@@ -22,14 +22,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/kyuch4n/react-inline-autocomplete.git"
+        "url": "git+https://github.com/thisiseyal/react-inline-autocomplete.git"
     },
     "author": "Kyu",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/kyuch4n/react-inline-autocomplete/issues"
+        "url": "https://github.com/thisiseyal/react-inline-autocomplete/issues"
     },
-    "homepage": "https://github.com/kyuch4n/react-inline-autocomplete#readme",
+    "homepage": "https://github.com/thisiseyal/react-inline-autocomplete#readme",
     "dependencies": {
         "@types/classnames": "^2.2.10",
         "@types/react": "^18.2.7",
