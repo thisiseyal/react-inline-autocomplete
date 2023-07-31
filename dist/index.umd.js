@@ -261,7 +261,7 @@
     };
     var wrapClassString = classNames('ria-wrap', styles['inline-autocomplete-wrap'], className); // `className` should cover `styles.wrap`
     var inputClassString = classNames('ria-input', styles['inline-autocomplete-input']);
-    var completeClassString = classNames('ria-complete', ['inline-autocomplete-complete']);
+    var completeClassString = classNames('ria-complete', styles['inline-autocomplete-complete']);
     var completeContent = breakUp();
     return React__default.createElement("div", {
       className: wrapClassString

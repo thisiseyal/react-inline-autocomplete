@@ -246,7 +246,7 @@ const TextAreaAutocomplete = (props, ref) => {
   };
   const wrapClassString = classNames('ria-wrap', styles['inline-autocomplete-wrap'], className); // `className` should cover `styles.wrap`
   const inputClassString = classNames('ria-input', styles['inline-autocomplete-input']);
-  const completeClassString = classNames('ria-complete', ['inline-autocomplete-complete']);
+  const completeClassString = classNames('ria-complete', styles['inline-autocomplete-complete']);
   const completeContent = breakUp();
   return React.createElement("div", {
     className: wrapClassString
