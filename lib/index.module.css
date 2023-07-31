@@ -19,7 +19,7 @@
 }
 
 .inline-autocomplete-input[disabled] {
-    cursor: not-allowed;
+    
 }
 
 .inline-autocomplete-complete {
